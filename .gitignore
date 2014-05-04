@@ -1,0 +1,8 @@
+templates/*
+!templates/.gitkeep
+build/*
+!build/.gitkeep
+*.pdf
+*.rtf
+*.zip
+out
