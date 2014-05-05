@@ -9,7 +9,7 @@ For further information see paul-steele.com/Pages/license.php
 Reads in a LaTeX source file and will replace ~FIELD~ with
 user selected input
 ----------------------------------------------------------*/
-#include "report_generator.hpp"
+#include "report_generator"
 
 int main(int argc, char** argv) {
 
