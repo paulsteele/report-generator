@@ -21,7 +21,7 @@ Args** args_make(int argc, char** argv);
 /*----------------------------------------------------------
 Frees an argument list
 ----------------------------------------------------------*/
-void args_free(Args** arg, int size);
+void args_free(Args** args, int size);
 
 /*----------------------------------------------------------
 Returns the key of an argument
