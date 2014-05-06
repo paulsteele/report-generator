@@ -12,5 +12,6 @@ user selected input
 #include "report_generator"
 
 int main(int argc, char** argv) {
-
+	Arguments* args = new Arguments(argc, argv);
+	delete args;
 }

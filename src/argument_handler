@@ -1,0 +1,22 @@
+#ifndef ARG_HANDLER
+#define ARG_HANDLER
+/*----------------------------------------------------------
+Handles arguments passed into program
+----------------------------------------------------------*/
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Arguments {
+	int number_of_arguments;
+	string** keys;
+	string** values;
+public:
+	Arguments(int argc, char** argv);
+	~Arguments();
+	int get_number_of_arguments();
+	string* key(int index);
+	string* value(int index);
+};
+#endif

@@ -1,5 +1,12 @@
+#ifndef REPORT_GEN_H
+#define REPORT_GEN_H
+
+//Namespace
+using namespace std;
 //Library Includes
+#include <iostream>
 #include <string>
 #include "config"
 #include "argument_handler"
-//Prototypes
+
+#endif
