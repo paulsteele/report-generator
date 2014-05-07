@@ -1,10 +1,12 @@
 #ifndef ARG_HANDLER
 #define ARG_HANDLER
 /*----------------------------------------------------------
-Handles arguments passed into program
+Handles arguments passed into program.
+Arguments have format "-KEY=VALUE". Value is optional 
 ----------------------------------------------------------*/
 #include <iostream>
 #include <string>
+#include <list>
 
 using namespace std;
 
@@ -14,10 +16,25 @@ class Arguments {
 	string** values;
 	string** argument_to_keyvalue(string* argument);
 public:
+	/*----------------------------------------------------------
+	Constructs the Argument class, argc = number of arguments
+	to look at, argv** = array of char* of the arguments
+	----------------------------------------------------------*/
 	Arguments(int argc, char** argv);
 	~Arguments();
+	/*----------------------------------------------------------
+	Returns the number of valid arguments passed into the class
+	----------------------------------------------------------*/
 	int get_number_of_arguments();
+	/*----------------------------------------------------------
+	Returns the key associated with the index number. NULL
+	is returned if outside bounds
+	----------------------------------------------------------*/
 	string* key(int index);
+	/*----------------------------------------------------------
+	Returns the value associated with the index number. NULL
+	is returned if outside bounds
+	----------------------------------------------------------*/
 	string* value(int index);
 };
 #endif

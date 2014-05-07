@@ -23,6 +23,25 @@ Arguments::Arguments(int argc, char** argv){
 		delete[] formated;
 		delete argument;
 	}
+	//clean up, only holding values that mean something
+	std::list<int> locations;
+	for (int i = 0; i < argc - 1; i++){
+		if (keys[i] == NULL){
+			locations.push_back(i);
+			--number_of_arguments;
+		}
+		else {
+			if (!locations.empty()){
+				int index = locations.front();
+				keys[index] = keys[i];
+				values[index] = values[i];
+				locations.pop_front();
+				locations.push_back(i);
+				keys[i] = NULL;
+				values[i] = NULL;
+			}
+		}
+	}
 }
 
 Arguments::~Arguments(){
@@ -59,11 +78,17 @@ string** Arguments::argument_to_keyvalue(string* argument){
 }
 
 string* Arguments::key(int index){
-	return keys[index];
+	if (index < number_of_arguments)
+		return keys[index];
+	else
+		return NULL;
 }
 
 string* Arguments::value(int index){
-	return values[index];
+	if (index < number_of_arguments)
+		return values[index];
+	else
+		return NULL;
 }
 
 int Arguments::get_number_of_arguments(){
