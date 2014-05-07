@@ -1,6 +1,6 @@
 CFILES = src/report_generator.cpp src/argument_handler.cpp
 OFILES = build/report_generator.o build/argument_handler.o
-FLAGS = -std=c++11
+FLAGS = -std=c++11 -g
 DEBUG = -g -Wall -Werror
 LINKS = 
 

@@ -12,6 +12,7 @@ class Arguments {
 	int number_of_arguments;
 	string** keys;
 	string** values;
+	string** argument_to_keyvalue(string* argument);
 public:
 	Arguments(int argc, char** argv);
 	~Arguments();
