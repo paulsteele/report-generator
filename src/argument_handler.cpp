@@ -91,6 +91,15 @@ string* Arguments::value(int index){
 		return NULL;
 }
 
+string* Arguments::value(string key){
+	for (int i = 0; i < number_of_arguments; i++){
+		if (key.compare(*keys[i]) == 0){
+			return values[i];
+		}
+	}
+	return NULL;
+}
+
 int Arguments::get_number_of_arguments(){
 	return number_of_arguments;
 }

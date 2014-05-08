@@ -13,5 +13,10 @@ user selected input
 
 int main(int argc, char** argv) {
 	Arguments* args = new Arguments(argc, argv);
+	string* file = args->value(string("file"));
 	delete args;
+}
+
+namespace report_generator {
+
 }

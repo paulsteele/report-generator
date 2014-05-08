@@ -36,5 +36,10 @@ public:
 	is returned if outside bounds
 	----------------------------------------------------------*/
 	string* value(int index);
+	/*----------------------------------------------------------
+	Returns the value associated with the key. NULL if string
+	not found
+	----------------------------------------------------------*/
+	string* value(string key);
 };
 #endif
