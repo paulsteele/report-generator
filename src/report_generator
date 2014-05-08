@@ -6,6 +6,8 @@ using namespace std;
 //Library Includes
 #include <iostream>
 #include <string>
+#include <list>
+#include <fstream>
 #include "config"
 #include "argument_handler"
 
