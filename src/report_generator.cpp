@@ -12,12 +12,33 @@ user selected input
 #include "report_generator"
 namespace report_generator {
 	void parse_template(string* file, list<string*>* fills){
+		//Setup Input of file
 		std::fstream in;
-		in.open(*file, std::fstream::in);
+		string oldfile = string("templates/");
+		oldfile += *file;
+		in.open(oldfile, std::fstream::in);
 		if (!in.good()) {
-			cout << *file << " does not exist. Exiting\n";
+			//Fail condition
+			cout << oldfile << " does not exist. Exiting\n";
+			in.close();
+			return;
 		}
+		//Setup Output of file
+		std::fstream out;
+
+		string newfile = string("build/");
+		newfile += *file;
+		out.open(newfile, std::fstream::out);
+		int c;
+
+		//push through the file
+		while ((c = in.get()) != EOF){
+			out.put(c);
+		}
+
+		//cleanup
 		in.close();
+		out.close();
 	}
 }
 
@@ -30,8 +51,8 @@ int main(int argc, char** argv) {
 		delete args;
 		return 0;
 	}
-	file->insert(0,"templates/");
 	list<string*>* fills = new list<string*>;
 	report_generator::parse_template(file, fills);
+	delete fills;
 	delete args;
 }
