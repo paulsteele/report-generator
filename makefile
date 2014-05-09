@@ -15,5 +15,5 @@ debug: $(CFILES)
 	g++ -o out $(FLAGS) $(OFILES)
 
 clean:
-	rm build/*.o
+	rm build/*
 	rm out

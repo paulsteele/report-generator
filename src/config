@@ -1,10 +1,13 @@
 #ifndef CONFIG
 #define CONFIG
 //The separator for definable fields, default ~
-#define SEPARATOR ~
-//Number of commands to run once files are generated
-#define NUM_COMMANDS 2
+#define SEPARATOR '~'
+//Number of commands to run once files are generated, these will have the file name appended to the end of them
+#define NUM_FILE_COMMANDS 2
+//Number of commands to run once files are generate, these will not have the file name appended to the end of them
+#define NUM_NORM_COMMANDS 2
 //array of commands to be run, undefined behavior if size != NUM_COMMANDS
 //enter as a comma separated list with commands in quotes
-std::string commands[NUM_COMMANDS] = {"ls", "ls -a"};
+std::string file_commands[NUM_FILE_COMMANDS] = {"pdflatex -aux-directory=build/ -output-directory=. /build/", "latex2rtf -aux-directory=build/ -output-directory=. /build/"};
+std::string norm_commands[NUM_NORM_COMMANDS] = {"mv *.aux build/", "mv *.log build/"};
 #endif

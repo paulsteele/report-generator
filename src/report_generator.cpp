@@ -30,10 +30,20 @@ namespace report_generator {
 		newfile += *file;
 		out.open(newfile, std::fstream::out);
 		int c;
-
+		bool inside = false;
+		string* field = new string();
 		//push through the file
 		while ((c = in.get()) != EOF){
-			out.put(c);
+			if (c == SEPARATOR && !inside){
+				//separator found
+				inside = true;
+			}
+			else if (c == SEPARATOR && inside){
+				inside = false;
+			}
+			else if (!inside){
+				out.put(c);
+			}
 		}
 
 		//cleanup
