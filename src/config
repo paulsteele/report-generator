@@ -8,6 +8,6 @@
 #define NUM_NORM_COMMANDS 2
 //array of commands to be run, undefined behavior if size != NUM_COMMANDS
 //enter as a comma separated list with commands in quotes
-std::string file_commands[NUM_FILE_COMMANDS] = {"pdflatex -output-directory=. build/", "latex2rtf -aux-directory=build/ -output-directory=. /build/"};
+std::string file_commands[NUM_FILE_COMMANDS] = {"pdflatex -aux-directory=build/ -output-directory=. build/", "latex2rtf -aux-directory=build/ -oRTF.rtf build/"};
 std::string norm_commands[NUM_NORM_COMMANDS] = {"mv *.aux build/", "mv *.log build/"};
 #endif

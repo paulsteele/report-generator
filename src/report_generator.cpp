@@ -67,6 +67,16 @@ namespace report_generator {
 		in.close();
 		out.close();
 	}
+
+	void system_calls(string file){
+		for (int i = 0; i < NUM_FILE_COMMANDS; i++){
+			system((file_commands[i] += file).c_str());
+		}
+		for (int i = 0; i < NUM_NORM_COMMANDS; i++){
+			system((norm_commands[i]).c_str());
+		}
+	}
+
 }
 
 int main(int argc, char** argv) {
@@ -80,6 +90,7 @@ int main(int argc, char** argv) {
 	}
 	list<string*>* fills = new list<string*>;
 	report_generator::parse_template(file, fills);
+	report_generator::system_calls(*file);
 	delete fills;
 	delete args;
 }
