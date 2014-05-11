@@ -11,6 +11,14 @@ user selected input
 ----------------------------------------------------------*/
 #include "report_generator"
 namespace report_generator {
+
+	string* ask_input(string field){
+		cout << "Please enter desired text for " << field << "\n";
+		string* text = new string();
+		std::getline(cin, *text);
+		return text;
+	}
+
 	void parse_template(string* file, list<string*>* fills){
 		//Setup Input of file
 		std::fstream in;
@@ -31,7 +39,7 @@ namespace report_generator {
 		out.open(newfile, std::fstream::out);
 		int c;
 		bool inside = false;
-		string* field = new string();
+		string field = string("");
 		//push through the file
 		while ((c = in.get()) != EOF){
 			if (c == SEPARATOR && !inside){
@@ -39,10 +47,19 @@ namespace report_generator {
 				inside = true;
 			}
 			else if (c == SEPARATOR && inside){
+				string* entered = ask_input(field);
+				fills->push_back(entered);
+				for (int i = 0; i < entered->size(); i++){
+					out.put(entered->at(i));
+				}
 				inside = false;
+				field.clear();
 			}
 			else if (!inside){
 				out.put(c);
+			}
+			else if(inside){
+				field += c;
 			}
 		}
 
