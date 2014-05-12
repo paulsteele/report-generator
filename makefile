@@ -17,3 +17,5 @@ debug: $(CFILES)
 clean:
 	rm build/*
 	rm out
+	rm *.pdf
+	rm *.rtf

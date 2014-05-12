@@ -19,7 +19,24 @@ namespace report_generator {
 		return text;
 	}
 
-	void parse_template(string* file, list<string*>* fills){
+	void cleanup_fills(list<string**>* fills){
+		while (fills->size() > 0){
+			delete fills->front()[0];
+			delete fills->front()[1];
+			fills->pop_front();
+		}
+	}
+
+	string* find_match(list<string**>* fills, string* match){
+		for (list<string**>::iterator i = fills->begin(); i != fills->end(); i++){
+			if (match->compare(*((*i)[0])) == 0){
+				return (*i)[1];
+			}
+		}
+		return NULL;
+	}
+
+	void parse_template(string* file, list<string**>* fills){
 		//Setup Input of file
 		std::fstream in;
 		string oldfile = string("templates/");
@@ -47,8 +64,15 @@ namespace report_generator {
 				inside = true;
 			}
 			else if (c == SEPARATOR && inside){
-				string* entered = ask_input(field);
-				fills->push_back(entered);
+
+				string* entered = find_match(fills, &field);
+				if (entered == NULL){
+					entered = ask_input(field);
+					string** list_container = new string*[2];
+					list_container[0] = new string(field);
+					list_container[1] = entered;
+					fills->push_back(list_container);
+				}
 				for (int i = 0; i < entered->size(); i++){
 					out.put(entered->at(i));
 				}
@@ -88,9 +112,10 @@ int main(int argc, char** argv) {
 		delete args;
 		return 0;
 	}
-	list<string*>* fills = new list<string*>;
+	list<string**>* fills = new list<string**>;
 	report_generator::parse_template(file, fills);
 	report_generator::system_calls(*file);
+	report_generator::cleanup_fills(fills);
 	delete fills;
 	delete args;
 }
