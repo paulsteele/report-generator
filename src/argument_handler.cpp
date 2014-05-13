@@ -91,10 +91,14 @@ string* Arguments::value(int index){
 		return NULL;
 }
 
-string* Arguments::value(string key){
+string* Arguments::value(string key, int index){
+	int current_index = 0;
 	for (int i = 0; i < number_of_arguments; i++){
 		if (key.compare(*keys[i]) == 0){
-			return values[i];
+			if (current_index == index)
+				return values[i];
+			else
+				current_index++;
 		}
 	}
 	return NULL;

@@ -40,6 +40,6 @@ public:
 	Returns the value associated with the key. NULL if string
 	not found
 	----------------------------------------------------------*/
-	string* value(string key);
+	string* value(string key, int index = 0);
 };
 #endif
