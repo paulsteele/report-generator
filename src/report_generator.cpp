@@ -94,10 +94,21 @@ namespace report_generator {
 
 	void system_calls(string file){
 		for (int i = 0; i < NUM_FILE_COMMANDS; i++){
-			system((file_commands[i] += file).c_str());
+			string execution = file_commands[i];
+			execution += file;
+			cout << "Execute '" << execution << "'?(y/n)\n";
+			string response;
+			cin >> response;
+			if (response.at(0) == 'y')
+				system(execution.c_str());
 		}
 		for (int i = 0; i < NUM_NORM_COMMANDS; i++){
-			system((norm_commands[i]).c_str());
+			string execution = norm_commands[i];
+			cout << "Execute '" << execution << "'?(y/n)\n";
+			string response;
+			cin >> response;
+			if (response.at(0) == 'y')
+				system(execution.c_str());
 		}
 	}
 
