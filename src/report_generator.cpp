@@ -93,25 +93,29 @@ namespace report_generator {
 		out.close();
 	}
 
+	bool ask_execution(string execution){
+		cout << "-----\nExecute '" << execution << "'?(y/n)\n";
+		string response;
+		cin >> response;
+		if (response.at(0) == 'y')
+			return true;
+		else
+			return false;
+	}
+
 	void file_system_calls(string file, int file_num = -1){
 		if (file_num == -1){ //DO ALL THE COMMANDS
 			for (int i = 0; i < NUM_FILE_COMMANDS; i++){
 				string execution = file_commands[i];
 				execution += file;
-				cout << "Execute '" << execution << "'?(y/n)\n";
-				string response;
-				cin >> response;
-				if (response.at(0) == 'y')
+				if (ask_execution(execution))
 					system(execution.c_str());
 			}
 		}
 		else {
 			string execution = file_commands[file_num];
 			execution += file;
-			cout << "Execute '" << execution << "'?(y/n)\n";
-			string response;
-			cin >> response;
-			if (response.at(0) == 'y')
+			if (ask_execution(execution))
 				system(execution.c_str());
 		}
 	}
@@ -120,19 +124,13 @@ namespace report_generator {
 		if (file_num == -1){
 			for (int i = 0; i < NUM_NORM_COMMANDS; i++){
 				string execution = norm_commands[i];
-				cout << "Execute '" << execution << "'?(y/n)\n";
-				string response;
-				cin >> response;
-				if (response.at(0) == 'y')
+				if (ask_execution(execution))
 					system(execution.c_str());
 			}
 		}
 		else {
 			string execution = norm_commands[file_num];
-			cout << "Execute '" << execution << "'?(y/n)\n";
-			string response;
-			cin >> response;
-			if (response.at(0) == 'y')
+			if (ask_execution(execution))
 				system(execution.c_str());
 		}
 	}
