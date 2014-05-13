@@ -92,18 +92,21 @@ namespace report_generator {
 		out.close();
 	}
 
-	void system_calls(string file){
-		for (int i = 0; i < NUM_FILE_COMMANDS; i++){
-			string execution = file_commands[i];
-			execution += file;
-			cout << "Execute '" << execution << "'?(y/n)\n";
-			string response;
-			cin >> response;
-			if (response.at(0) == 'y')
-				system(execution.c_str());
+	void file_system_calls(string file, int file_num = -1){
+		if (file_num == -1){ //DO ALL THE COMMANDS
+			for (int i = 0; i < NUM_FILE_COMMANDS; i++){
+				string execution = file_commands[i];
+				execution += file;
+				cout << "Execute '" << execution << "'?(y/n)\n";
+				string response;
+				cin >> response;
+				if (response.at(0) == 'y')
+					system(execution.c_str());
+			}
 		}
-		for (int i = 0; i < NUM_NORM_COMMANDS; i++){
-			string execution = norm_commands[i];
+		else {
+			string execution = file_commands[file_num];
+			execution += file;
 			cout << "Execute '" << execution << "'?(y/n)\n";
 			string response;
 			cin >> response;
@@ -112,8 +115,28 @@ namespace report_generator {
 		}
 	}
 
+	void norm_system_calls(int file_num = -1){
+		if (file_num == -1){
+			for (int i = 0; i < NUM_NORM_COMMANDS; i++){
+				string execution = norm_commands[i];
+				cout << "Execute '" << execution << "'?(y/n)\n";
+				string response;
+				cin >> response;
+				if (response.at(0) == 'y')
+					system(execution.c_str());
+			}
+		}
+		else {
+			string execution = norm_commands[file_num];
+			cout << "Execute '" << execution << "'?(y/n)\n";
+			string response;
+			cin >> response;
+			if (response.at(0) == 'y')
+				system(execution.c_str());
+		}
+	}
 }
-
+	
 int main(int argc, char** argv) {
 	Arguments* args = new Arguments(argc, argv);
 	string* file = args->value(string("file"));
@@ -125,7 +148,8 @@ int main(int argc, char** argv) {
 	}
 	list<string**>* fills = new list<string**>;
 	report_generator::parse_template(file, fills);
-	report_generator::system_calls(*file);
+	report_generator::file_system_calls(*file);
+	report_generator::norm_system_calls();
 	report_generator::cleanup_fills(fills);
 	delete fills;
 	delete args;
