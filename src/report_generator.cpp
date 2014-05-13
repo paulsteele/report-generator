@@ -23,6 +23,7 @@ namespace report_generator {
 		while (fills->size() > 0){
 			delete fills->front()[0];
 			delete fills->front()[1];
+			delete[] fills->front();
 			fills->pop_front();
 		}
 	}
