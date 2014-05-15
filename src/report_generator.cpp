@@ -103,34 +103,34 @@ namespace report_generator {
 			return false;
 	}
 
-	void file_system_calls(string file, int file_num = -1){
+	void file_system_calls(string file, bool ask_for_execution, int file_num = -1){
 		if (file_num == -1){ //DO ALL THE COMMANDS
 			for (int i = 0; i < NUM_FILE_COMMANDS; i++){
 				string execution = file_commands[i];
 				execution += file;
-				if (ask_execution(execution))
+				if (!ask_for_execution || ask_execution(execution))
 					system(execution.c_str());
 			}
 		}
 		else {
 			string execution = file_commands[file_num];
 			execution += file;
-			if (ask_execution(execution))
+			if (!ask_for_execution || ask_execution(execution))
 				system(execution.c_str());
 		}
 	}
 
-	void norm_system_calls(int file_num = -1){
+	void norm_system_calls( bool ask_for_execution, int file_num = -1){
 		if (file_num == -1){
 			for (int i = 0; i < NUM_NORM_COMMANDS; i++){
 				string execution = norm_commands[i];
-				if (ask_execution(execution))
+				if (!ask_for_execution || ask_execution(execution))
 					system(execution.c_str());
 			}
 		}
 		else {
 			string execution = norm_commands[file_num];
-			if (ask_execution(execution))
+			if (!ask_for_execution || ask_execution(execution))
 				system(execution.c_str());
 		}
 	}
@@ -138,23 +138,31 @@ namespace report_generator {
 	
 int main(int argc, char** argv) {
 	Arguments* args = new Arguments(argc, argv);
-	string* file = args->value(string("file"));
+	string* file = args->value(string("f"));
 	if (file == NULL){
 		//exit conditions
 		cout << "No file specified. Exiting\n";
 		delete args;
 		return 0;
 	}
+
+	bool ask_for_execution = true;
+	for (int i = 0; i < args->get_number_of_arguments(); i++){
+		if (args->key(i)->compare(string("e")) == 0){
+			ask_for_execution = false;
+		}
+	}
+
 	list<string**>* fills = new list<string**>;
 	int i = 0;
 	while (file != NULL){
 		cout << "-----\nParsing " << *file << "\n-----\n";
 		report_generator::parse_template(file, fills);
-		report_generator::file_system_calls(*file, i++);
-		file = args->value(string("file"), i); //note this is the NEXT i considering i++ above
+		report_generator::file_system_calls(*file, ask_for_execution, i++);
+		file = args->value(string("f"), i); //note this is the NEXT i considering i++ above
 
 	}
-	report_generator::norm_system_calls();
+	report_generator::norm_system_calls(ask_for_execution);
 	report_generator::cleanup_fills(fills);
 	delete fills;
 	delete args;
