@@ -146,8 +146,14 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 	list<string**>* fills = new list<string**>;
-	report_generator::parse_template(file, fills);
-	report_generator::file_system_calls(*file);
+	int i = 0;
+	while (file != NULL){
+		cout << "-----\nParsing " << *file << "\n-----\n";
+		report_generator::parse_template(file, fills);
+		report_generator::file_system_calls(*file, i++);
+		file = args->value(string("file"), i); //note this is the NEXT i considering i++ above
+
+	}
 	report_generator::norm_system_calls();
 	report_generator::cleanup_fills(fills);
 	delete fills;

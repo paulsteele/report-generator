@@ -95,10 +95,13 @@ string* Arguments::value(string key, int index){
 	int current_index = 0;
 	for (int i = 0; i < number_of_arguments; i++){
 		if (key.compare(*keys[i]) == 0){
-			if (current_index == index)
+			if (current_index == index){
 				return values[i];
-			else
+			}
+			else{
+				
 				current_index++;
+			}
 		}
 	}
 	return NULL;
