@@ -37,14 +37,19 @@ namespace report_generator {
 		return NULL;
 	}
 
-	void parse_helper(string* field, bool* inside, char c, list<string**>* fills, std::fstream* out){
+	void parse_helper(string* field, bool* inside, char c, list<string**>* fills, std::fstream* out, bool* breakout, int field_append = -1){
 		
+		if (field_append != -1){
+			string insert = string("");
+			insert+= (field_append + 48);
+			field->insert(0, insert);
+		}
+
 		if (c == SEPARATOR && !*inside){
 			//separator found
 			*inside = true;
 		}
 		else if (c == SEPARATOR && *inside){
-
 			string* entered = find_match(fills, field);
 			if (entered == NULL){
 				entered = ask_input(*field);
@@ -56,6 +61,9 @@ namespace report_generator {
 			for (int i = 0; i < entered->size(); i++){
 				out->put(entered->at(i));
 			}
+			if (entered->compare("") == 0){
+				*breakout = true;
+			}
 			*inside = false;
 			field->clear();
 		}
@@ -64,6 +72,11 @@ namespace report_generator {
 		}
 		else if(*inside){
 			*field += c;
+		}
+
+
+		if (field_append != -1 && field->compare("") != 0){
+			field->erase(0);
 		}
 
 	}
@@ -89,7 +102,9 @@ namespace report_generator {
 		int c;
 		bool inside_multi = false;
 		bool inside = false;
+		bool breakout = false;
 		string field = string("");
+		cout << field << "\n";
 		string multifield = string("");
 		//push through the file
 		while ((c = in.get()) != EOF){
@@ -98,18 +113,21 @@ namespace report_generator {
 			}
 			else if (c == MULTISEPARATOR && inside_multi){
 				//the looping here
+				breakout = false;
 				inside_multi = false;
-				for (int i = 0; i < 5; i++){
+				int iteration = 1;
+				while (!breakout){
 					for (int j = 0; j < multifield.size(); j++){
-						parse_helper(&field, &inside, multifield.at(j), fills, &out);
+						parse_helper(&field, &inside, multifield.at(j), fills, &out, &breakout, iteration);
 					}
+					iteration++;
 				}
 
 				multifield.clear();
 			}
 			else if (!inside_multi){
 				//not in multi
-				parse_helper(&field, &inside, c, fills, &out);
+				parse_helper(&field, &inside, c, fills, &out, &breakout);
 			}
 			else if (inside_multi){
 				multifield += c;
