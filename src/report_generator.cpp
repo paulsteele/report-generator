@@ -37,6 +37,37 @@ namespace report_generator {
 		return NULL;
 	}
 
+	void parse_helper(string* field, bool* inside, char c, list<string**>* fills, std::fstream* out){
+		
+		if (c == SEPARATOR && !*inside){
+			//separator found
+			*inside = true;
+		}
+		else if (c == SEPARATOR && *inside){
+
+			string* entered = find_match(fills, field);
+			if (entered == NULL){
+				entered = ask_input(*field);
+				string** list_container = new string*[2];
+				list_container[0] = new string(*field);
+				list_container[1] = entered;
+				fills->push_back(list_container);
+			}
+			for (int i = 0; i < entered->size(); i++){
+				out->put(entered->at(i));
+			}
+			*inside = false;
+			field->clear();
+		}
+		else if (!*inside){
+			out->put(c);
+		}
+		else if(*inside){
+			*field += c;
+		}
+
+	}
+
 	void parse_template(string* file, list<string**>* fills){
 		//Setup Input of file
 		std::fstream in;
@@ -56,8 +87,8 @@ namespace report_generator {
 		newfile += *file;
 		out.open(newfile, std::fstream::out);
 		int c;
-		bool inside = false;
 		bool inside_multi = false;
+		bool inside = false;
 		string field = string("");
 		string multifield = string("");
 		//push through the file
@@ -67,39 +98,21 @@ namespace report_generator {
 			}
 			else if (c == MULTISEPARATOR && inside_multi){
 				//the looping here
+				inside_multi = false;
+				for (int i = 0; i < 5; i++){
+					for (int j = 0; j < multifield.size(); j++){
+						parse_helper(&field, &inside, multifield.at(j), fills, &out);
+					}
+				}
+
+				multifield.clear();
 			}
 			else if (!inside_multi){
 				//not in multi
+				parse_helper(&field, &inside, c, fills, &out);
 			}
 			else if (inside_multi){
 				multifield += c;
-			}
-
-			if (c == SEPARATOR && !inside){
-				//separator found
-				inside = true;
-			}
-			else if (c == SEPARATOR && inside){
-
-				string* entered = find_match(fills, &field);
-				if (entered == NULL){
-					entered = ask_input(field);
-					string** list_container = new string*[2];
-					list_container[0] = new string(field);
-					list_container[1] = entered;
-					fills->push_back(list_container);
-				}
-				for (int i = 0; i < entered->size(); i++){
-					out.put(entered->at(i));
-				}
-				inside = false;
-				field.clear();
-			}
-			else if (!inside){
-				out.put(c);
-			}
-			else if(inside){
-				field += c;
 			}
 		}
 

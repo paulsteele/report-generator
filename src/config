@@ -3,7 +3,7 @@
 //The separator for definable fields, default ~
 #define SEPARATOR '~'
 //Multi line separator for any text, default |
-#define MULTISEPARATOR '|'
+#define MULTISEPARATOR '`'
 //Number of commands to run once files are generated, these will have the file name appended to the end of them
 #define NUM_FILE_COMMANDS 2
 //Number of commands to run once files are generate, these will not have the file name appended to the end of them
