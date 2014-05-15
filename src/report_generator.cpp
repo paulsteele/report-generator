@@ -57,9 +57,24 @@ namespace report_generator {
 		out.open(newfile, std::fstream::out);
 		int c;
 		bool inside = false;
+		bool inside_multi = false;
 		string field = string("");
+		string multifield = string("");
 		//push through the file
 		while ((c = in.get()) != EOF){
+			if (c == MULTISEPARATOR && !inside_multi){
+				inside_multi = true;
+			}
+			else if (c == MULTISEPARATOR && inside_multi){
+				//the looping here
+			}
+			else if (!inside_multi){
+				//not in multi
+			}
+			else if (inside_multi){
+				multifield += c;
+			}
+
 			if (c == SEPARATOR && !inside){
 				//separator found
 				inside = true;
