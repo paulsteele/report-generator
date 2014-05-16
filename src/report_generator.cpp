@@ -37,11 +37,13 @@ namespace report_generator {
 		return NULL;
 	}
 
-	void parse_helper(string* field, bool* inside, char c, list<string**>* fills, std::fstream* out, bool* breakout, int field_append = -1){
+	void parse_helper(string* field, bool* inside, char c, list<string**>* fills, std::fstream* out, int field_append = -1){
 		
 		if (field_append != -1){
 			string insert = string("");
 			insert+= (field_append + 48);
+			insert+= (": ");
+			//cout << "inserting " << (char) (field_append + 48) << "to " << *field << '\n';
 			field->insert(0, insert);
 		}
 
@@ -61,9 +63,6 @@ namespace report_generator {
 			for (int i = 0; i < entered->size(); i++){
 				out->put(entered->at(i));
 			}
-			if (entered->compare("") == 0){
-				*breakout = true;
-			}
 			*inside = false;
 			field->clear();
 		}
@@ -74,9 +73,8 @@ namespace report_generator {
 			*field += c;
 		}
 
-
 		if (field_append != -1 && field->compare("") != 0){
-			field->erase(0);
+			field->erase(0, 3);
 		}
 
 	}
@@ -118,8 +116,16 @@ namespace report_generator {
 				int iteration = 1;
 				while (!breakout){
 					for (int j = 0; j < multifield.size(); j++){
-						parse_helper(&field, &inside, multifield.at(j), fills, &out, &breakout, iteration);
+						parse_helper(&field, &inside, multifield.at(j), fills, &out, iteration);
 					}
+					cout << "Enter 'n' to finish this multi line, or any key to continue\n";
+					string enterinfo = string("");
+					cin >> enterinfo;
+					if (enterinfo.compare("n") == 0){
+						breakout = true;
+					}
+					cin.clear();
+					cin.ignore();
 					iteration++;
 				}
 
@@ -127,7 +133,7 @@ namespace report_generator {
 			}
 			else if (!inside_multi){
 				//not in multi
-				parse_helper(&field, &inside, c, fills, &out, &breakout);
+				parse_helper(&field, &inside, c, fills, &out);
 			}
 			else if (inside_multi){
 				multifield += c;
@@ -143,6 +149,8 @@ namespace report_generator {
 		cout << "-----\nExecute '" << execution << "'?(y/n)\n";
 		string response;
 		cin >> response;
+		cin.clear();
+		cin.ignore();
 		if (response.at(0) == 'y')
 			return true;
 		else
