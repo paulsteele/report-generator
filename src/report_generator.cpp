@@ -37,7 +37,7 @@ namespace report_generator {
 		return NULL;
 	}
 
-	void parse_helper(string* field, bool* inside, char c, list<string**>* fills, std::fstream* out, int field_append = -1){
+	void parse_helper(string* field, bool* inside, bool* autofilled, char c, list<string**>* fills, std::fstream* out, int field_append = -1){
 		
 		if (field_append != -1){
 			string insert = string("");
@@ -59,6 +59,9 @@ namespace report_generator {
 				list_container[0] = new string(*field);
 				list_container[1] = entered;
 				fills->push_back(list_container);
+			}
+			else{
+				*autofilled = true;
 			}
 			for (int i = 0; i < entered->size(); i++){
 				out->put(entered->at(i));
@@ -101,6 +104,7 @@ namespace report_generator {
 		bool inside_multi = false;
 		bool inside = false;
 		bool breakout = false;
+		bool autofilled = false;
 		string field = string("");
 		cout << field << "\n";
 		string multifield = string("");
@@ -113,19 +117,23 @@ namespace report_generator {
 				//the looping here
 				breakout = false;
 				inside_multi = false;
+				autofilled = false;
 				int iteration = 1;
 				while (!breakout){
+					autofilled = false;
 					for (int j = 0; j < multifield.size(); j++){
-						parse_helper(&field, &inside, multifield.at(j), fills, &out, iteration);
+						parse_helper(&field, &inside, &autofilled, multifield.at(j), fills, &out, iteration);
 					}
-					cout << "Enter 'n' to finish this multi line, or any key to continue\n";
-					string enterinfo = string("");
-					cin >> enterinfo;
-					if (enterinfo.compare("n") == 0){
-						breakout = true;
+					if (!autofilled) {
+						cout << "Enter 'n' to finish this multi line, or any key to continue\n";
+						string enterinfo = string("");
+						cin >> enterinfo;
+						if (enterinfo.compare("n") == 0){
+							breakout = true;
+						}
+						cin.clear();
+						cin.ignore();
 					}
-					cin.clear();
-					cin.ignore();
 					iteration++;
 				}
 
@@ -133,7 +141,7 @@ namespace report_generator {
 			}
 			else if (!inside_multi){
 				//not in multi
-				parse_helper(&field, &inside, c, fills, &out);
+				parse_helper(&field, &inside, &autofilled, c, fills, &out);
 			}
 			else if (inside_multi){
 				multifield += c;
