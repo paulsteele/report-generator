@@ -82,7 +82,7 @@ namespace report_generator {
 
 	}
 
-	void parse_template(string* file, list<string**>* fills){
+	void parse_template(string* file, list<string**>* fills, int it, list<int>* multisize){
 		//Setup Input of file
 		std::fstream in;
 		string oldfile = string("templates/");
@@ -135,11 +135,17 @@ namespace report_generator {
 						cin.ignore();
 					}
 					iteration++;
+
+					if (it != 1 && iteration == multisize->front()){
+						multisize->pop_front();
+						breakout = true;
+					}
 				}
+				multisize->push_back(iteration);
 
 				multifield.clear();
 			}
-			else if (!inside_multi){
+			else if (!inside_multi) {
 				//not in multi
 				parse_helper(&field, &inside, &autofilled, c, fills, &out);
 			}
@@ -201,6 +207,7 @@ namespace report_generator {
 int main(int argc, char** argv) {
 	Arguments* args = new Arguments(argc, argv);
 	string* file = args->value(string("f"));
+	list<int> multisize = list<int>();
 	if (file == NULL){
 		//exit conditions
 		cout << "No file specified. Exiting\n";
@@ -219,7 +226,7 @@ int main(int argc, char** argv) {
 	int i = 0;
 	while (file != NULL){
 		cout << "-----\nParsing " << *file << "\n-----\n";
-		report_generator::parse_template(file, fills);
+		report_generator::parse_template(file, fills, i, &multisize);
 		report_generator::file_system_calls(*file, ask_for_execution, i++);
 		file = args->value(string("f"), i); //note this is the NEXT i considering i++ above
 
