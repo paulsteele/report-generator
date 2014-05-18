@@ -136,7 +136,7 @@ namespace report_generator {
 					}
 					iteration++;
 
-					if (it != 1 && iteration == multisize->front()){
+					if (it != 0 && iteration == multisize->front()){
 						multisize->pop_front();
 						breakout = true;
 					}
