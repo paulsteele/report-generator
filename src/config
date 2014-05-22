@@ -7,9 +7,9 @@
 //Number of commands to run once files are generated, these will have the file name appended to the end of them
 #define NUM_FILE_COMMANDS 2
 //Number of commands to run once files are generate, these will not have the file name appended to the end of them
-#define NUM_NORM_COMMANDS 2
+#define NUM_NORM_COMMANDS 3
 //array of commands to be run, undefined behavior if size != NUM_COMMANDS
 //enter as a comma separated list with commands in quotes
 std::string file_commands[NUM_FILE_COMMANDS] = {"pdflatex -output-directory=. build/", "latex2rtf -oRTF.rtf build/"};
-std::string norm_commands[NUM_NORM_COMMANDS] = {"mv *.aux build/", "mv *.log build/"};
+std::string norm_commands[NUM_NORM_COMMANDS] = {"mv *.aux build/", "mv *.log build/", "zip -c *.rtf *.pdf > output.zip"};
 #endif

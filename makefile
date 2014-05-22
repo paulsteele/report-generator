@@ -19,3 +19,4 @@ clean:
 	rm out
 	rm *.pdf
 	rm *.rtf
+	rm *.zip
