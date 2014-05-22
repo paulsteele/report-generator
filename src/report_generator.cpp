@@ -225,8 +225,20 @@ int main(int argc, char** argv) {
 	list<string**>* fills = new list<string**>;
 	int i = 0;
 	while (file != NULL){
+
+		list<int> unit;
+		if (i!=0){
+			unit = list<int>(multisize);
+		}
+		else{
+			unit = multisize;
+		}
+
 		cout << "-----\nParsing " << *file << "\n-----\n";
-		report_generator::parse_template(file, fills, i, &multisize);
+		report_generator::parse_template(file, fills, i, &unit);
+		if (i==0){
+			multisize = unit;
+		}
 		report_generator::file_system_calls(*file, ask_for_execution, i++);
 		file = args->value(string("f"), i); //note this is the NEXT i considering i++ above
 
