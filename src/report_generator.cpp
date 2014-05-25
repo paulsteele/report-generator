@@ -19,6 +19,16 @@ namespace report_generator {
 		return text;
 	}
 
+	void write_fills(list<string**>* fills, string file) {
+		std::fstream out;
+		out.open(file, std::fstream::out);
+		for (string** i : *fills){
+			out << *(i[1]) << '\n';
+		}
+		out.close();
+	}
+
+
 	void cleanup_fills(list<string**>* fills){
 		while (fills->size() > 0){
 			delete fills->front()[0];
@@ -128,9 +138,16 @@ namespace report_generator {
 						cout << "Enter 'n' to finish this multi line, or any key to continue\n";
 						string enterinfo = string("");
 						cin >> enterinfo;
+
+						string** list_container = new string*[2];
+						list_container[0] = new string("~");
+						list_container[1] = new string("y");
 						if (enterinfo.compare("n") == 0){
+							delete list_container[1];
+							list_container[1] = new string("n");
 							breakout = true;
 						}
+						fills->push_back(list_container);
 						cin.clear();
 						cin.ignore();
 					}
@@ -159,46 +176,57 @@ namespace report_generator {
 		out.close();
 	}
 
-	bool ask_execution(string execution){
+	bool ask_execution(string execution, list<string**>* fills){
 		cout << "-----\nExecute '" << execution << "'?(y/n)\n";
 		string response;
 		cin >> response;
 		cin.clear();
 		cin.ignore();
-		if (response.at(0) == 'y')
+
+		string** list_container = new string*[2];
+		list_container[0] = new string("~");
+		list_container[1] = new string("y");
+
+		if (response.at(0) == 'y'){
+			fills->push_back(list_container);
 			return true;
-		else
+		}
+		else{
+			delete list_container[1];
+			list_container[1] = new string("n");
+			fills->push_back(list_container);
 			return false;
+		}
 	}
 
-	void file_system_calls(string file, bool ask_for_execution, int file_num = -1){
+	void file_system_calls(string file, bool ask_for_execution, list<string**>* fills, int file_num = -1){
 		if (file_num == -1){ //DO ALL THE COMMANDS
 			for (int i = 0; i < NUM_FILE_COMMANDS; i++){
 				string execution = file_commands[i];
 				execution += file;
-				if (!ask_for_execution || ask_execution(execution))
+				if (!ask_for_execution || ask_execution(execution, fills))
 					system(execution.c_str());
 			}
 		}
 		else {
 			string execution = file_commands[file_num];
 			execution += file;
-			if (!ask_for_execution || ask_execution(execution))
+			if (!ask_for_execution || ask_execution(execution, fills))
 				system(execution.c_str());
 		}
 	}
 
-	void norm_system_calls( bool ask_for_execution, int file_num = -1){
+	void norm_system_calls( bool ask_for_execution, list<string**>* fills, int file_num = -1){
 		if (file_num == -1){
 			for (int i = 0; i < NUM_NORM_COMMANDS; i++){
 				string execution = norm_commands[i];
-				if (!ask_for_execution || ask_execution(execution))
+				if (!ask_for_execution || ask_execution(execution, fills))
 					system(execution.c_str());
 			}
 		}
 		else {
 			string execution = norm_commands[file_num];
-			if (!ask_for_execution || ask_execution(execution))
+			if (!ask_for_execution || ask_execution(execution, fills))
 				system(execution.c_str());
 		}
 	}
@@ -239,11 +267,12 @@ int main(int argc, char** argv) {
 		if (i==0){
 			multisize = unit;
 		}
-		report_generator::file_system_calls(*file, ask_for_execution, i++);
+		report_generator::file_system_calls(*file, ask_for_execution, fills, i++);
 		file = args->value(string("f"), i); //note this is the NEXT i considering i++ above
 
 	}
-	report_generator::norm_system_calls(ask_for_execution);
+	report_generator::norm_system_calls(ask_for_execution, fills);
+	report_generator::write_fills(fills, string("input.txt"));
 	report_generator::cleanup_fills(fills);
 	delete fills;
 	delete args;
