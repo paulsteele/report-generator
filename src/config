@@ -11,5 +11,5 @@
 //array of commands to be run, undefined behavior if size != NUM_COMMANDS
 //enter as a comma separated list with commands in quotes
 std::string file_commands[NUM_FILE_COMMANDS] = {"pdflatex -output-directory=. build/", "latex2rtf -oRTF.rtf build/"};
-std::string norm_commands[NUM_NORM_COMMANDS] = {"mv *.aux build/", "mv *.log build/", "zip output.zip *.rtf *.pdf"};
+std::string norm_commands[NUM_NORM_COMMANDS] = {"mv *.aux build/", "mv *.log build/", "zip output.zip *.rtf *.pdf *.txt"};
 #endif
