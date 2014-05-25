@@ -5,4 +5,5 @@ build/*
 *.pdf
 *.rtf
 *.zip
+*.txt
 out
