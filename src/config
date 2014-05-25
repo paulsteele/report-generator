@@ -1,14 +1,22 @@
 #ifndef CONFIG
 #define CONFIG
-//The separator for definable fields, default ~
+//The separator for definable fields, default ~ . Must be a single character surrounded by single quotes
+//Example ~FIELD~ will be replaced by user defined input
 #define SEPARATOR '~'
-//Multi line separator for any text, default |
+
+//Multi line separator for any text, default | . Must be a single character surrounded by single quotes
+//Example |~FIELD~| will be duplicated until the user ends repetition. FIELD will be a different input each duplication
+//Duplication can be used on constants as well
 #define MULTISEPARATOR '`'
+
 //Number of commands to run once files are generated, these will have the file name appended to the end of them
+//Note order of the files fed to the program matters
 #define NUM_FILE_COMMANDS 2
+
 //Number of commands to run once files are generate, these will not have the file name appended to the end of them
 #define NUM_NORM_COMMANDS 3
-//array of commands to be run, undefined behavior if size != NUM_COMMANDS
+
+//array of commands to be run, undefined behavior if size does not equal NUM_COMMANDS
 //enter as a comma separated list with commands in quotes
 std::string file_commands[NUM_FILE_COMMANDS] = {"pdflatex -output-directory=. build/", "latex2rtf -oRTF.rtf build/"};
 std::string norm_commands[NUM_NORM_COMMANDS] = {"mv *.aux build/", "mv *.log build/", "zip output.zip *.rtf *.pdf *.txt"};

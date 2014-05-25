@@ -1,17 +1,25 @@
 /*----------------------------------------------------------
 Argument Handler
 
-Parses through arguments and returns an array of valid
-"keys" and "values"
+Handles arguments passed into program.
+Arguments have format "-KEY=VALUE". Value is optional 
 ----------------------------------------------------------*/
 #include "argument_handler"
 
+/*----------------------------------------------------------
+	Constructs the Argument class
+	argc = number of arguments to look at
+	argv = array of char* of the arguments
+----------------------------------------------------------*/
 Arguments::Arguments(int argc, char** argv){
-	argv++; //get past the file name argument
-	number_of_arguments = argc - 1;
+	//account for the program name being the first argument
+	argv++; 
+	number_of_arguments = argc - 1; 
+
 	//allocate space for the keys and values
 	keys = new string* [number_of_arguments];
 	values = new string* [number_of_arguments];
+
 	//fill up the keys and values
 	for (int i = 0; i < number_of_arguments; i++){
 		string* argument = new string(argv[i]); //take char* into string
@@ -44,7 +52,12 @@ Arguments::Arguments(int argc, char** argv){
 	}
 }
 
+
+/*----------------------------------------------------------
+Frees data used in construction of argument list
+----------------------------------------------------------*/
 Arguments::~Arguments(){
+	//Free all data held in keys and values
 	for (int i = 0; i < number_of_arguments; i++){
 		delete keys[i];
 		delete values[i];
@@ -53,6 +66,11 @@ Arguments::~Arguments(){
 	delete[] values;
 }
 
+/*----------------------------------------------------------
+Takes in a string as an argument. The argument should
+be in format -KEY=VALUE value is optional. Will always return
+a string array of size 2 but those strings may be NULL
+----------------------------------------------------------*/
 string** Arguments::argument_to_keyvalue(string* argument){
 	string** keyvalue = new string* [2];
 	//valid arguments have - as the first character
@@ -77,6 +95,10 @@ string** Arguments::argument_to_keyvalue(string* argument){
 	return keyvalue;
 }
 
+/*----------------------------------------------------------
+Returns the key associated with the index number. NULL
+is returned if outside bounds
+----------------------------------------------------------*/
 string* Arguments::key(int index){
 	if (index < number_of_arguments)
 		return keys[index];
@@ -84,6 +106,10 @@ string* Arguments::key(int index){
 		return NULL;
 }
 
+/*----------------------------------------------------------
+Returns the value associated with the index number. NULL
+is returned if outside bounds
+----------------------------------------------------------*/
 string* Arguments::value(int index){
 	if (index < number_of_arguments)
 		return values[index];
@@ -91,6 +117,11 @@ string* Arguments::value(int index){
 		return NULL;
 }
 
+/*----------------------------------------------------------
+Returns the value associated with the key. NULL if string
+not found. An index can be specified to find the 1st, 2nd,
+3rd... etc. iteration of they key
+----------------------------------------------------------*/
 string* Arguments::value(string key, int index){
 	int current_index = 0;
 	for (int i = 0; i < number_of_arguments; i++){
@@ -107,6 +138,9 @@ string* Arguments::value(string key, int index){
 	return NULL;
 }
 
+/*----------------------------------------------------------
+Returns the number of valid arguments passed into the class
+----------------------------------------------------------*/
 int Arguments::get_number_of_arguments(){
 	return number_of_arguments;
 }

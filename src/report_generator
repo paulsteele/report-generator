@@ -1,9 +1,9 @@
 #ifndef REPORT_GEN_H
 #define REPORT_GEN_H
 
-//Namespace
+//Name space includes
 using namespace std;
-//Library Includes
+//Library includes
 #include <iostream>
 #include <string>
 #include <list>
