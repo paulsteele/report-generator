@@ -10,8 +10,26 @@ Reads in a LaTeX source file and will replace ~FIELD~ with
 user selected input
 ----------------------------------------------------------*/
 #include "report_generator"
+
+/*----------------------------------------------------------
+Main function declaration. 
+
+In this name space the argument 'fills' is a pointer
+to a list of string arrays of length two. The first string
+is the template field and the second is the replacement
+value. The goal of this is to allow multiple templates
+with identical fields to be automatically filled.
+
+the fills list is also used to store choices of 
+confirmation prompts 
+----------------------------------------------------------*/
 namespace report_generator {
 
+	/*----------------------------------------------------------
+	Takes in a field name, prompts the user for the desired
+	replacement text, and returns a pointer to the allocated
+	string containing the replacement.
+	----------------------------------------------------------*/
 	string* ask_input(string field){
 		cout << "Please enter desired text for " << field << "\n";
 		string* text = new string();
@@ -19,6 +37,11 @@ namespace report_generator {
 		return text;
 	}
 
+	/*----------------------------------------------------------
+	Takes in the fills list and the name of a file and writes
+	all of the replacement text values to the file.
+	Effectively prints all of the input entered into the program
+	----------------------------------------------------------*/
 	void write_fills(list<string**>* fills, string file) {
 		std::fstream out;
 		out.open(file, std::fstream::out);
@@ -28,7 +51,9 @@ namespace report_generator {
 		out.close();
 	}
 
-
+	/*----------------------------------------------------------
+	frees allocated memory in the fills list
+	----------------------------------------------------------*/
 	void cleanup_fills(list<string**>* fills){
 		while (fills->size() > 0){
 			delete fills->front()[0];
@@ -38,6 +63,11 @@ namespace report_generator {
 		}
 	}
 
+	/*----------------------------------------------------------
+	Looks for the match argument in the first string of the fills
+	list. When it finds a match it returns the second string of
+	the fills list. Returns NULL if no match can be found
+	----------------------------------------------------------*/
 	string* find_match(list<string**>* fills, string* match){
 		for (list<string**>::iterator i = fills->begin(); i != fills->end(); i++){
 			if (match->compare(*((*i)[0])) == 0){
@@ -47,6 +77,15 @@ namespace report_generator {
 		return NULL;
 	}
 
+	/*----------------------------------------------------------
+	Helper function to deal with parsing
+	field = name of the field being dealt with
+	inside = whether or not inside a multi line (will prevent immediate output to file)
+	autofilled = whether or not this is the second time the field is filled. Allows to bypass confirmation messages
+	list = (see namespace comments)
+	out = output stream
+	field append = the iteration the multiline is on. -1 means it is not a multiline
+	----------------------------------------------------------*/
 	void parse_helper(string* field, bool* inside, bool* autofilled, char c, list<string**>* fills, std::fstream* out, int field_append = -1){
 		
 		if (field_append != -1){
@@ -91,7 +130,6 @@ namespace report_generator {
 		}
 
 	}
-
 	void parse_template(string* file, list<string**>* fills, int it, list<int>* multisize){
 		//Setup Input of file
 		std::fstream in;
