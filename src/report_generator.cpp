@@ -69,11 +69,11 @@ namespace report_generator {
 	the fills list. Returns NULL if no match can be found
 	----------------------------------------------------------*/
 	string* find_match(list<string**>* fills, string* match){
-		for (list<string**>::iterator i = fills->begin(); i != fills->end(); i++){
-			if (match->compare(*((*i)[0])) == 0){
-				return (*i)[1];
-			}
+		for (string** i : *fills){
+			if (match->compare(*i[0]) == 0)
+				return i[1];
 		}
+
 		return NULL;
 	}
 
