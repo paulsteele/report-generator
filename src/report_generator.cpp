@@ -130,6 +130,17 @@ namespace report_generator {
 		}
 
 	}
+
+	/*----------------------------------------------------------
+	Parses a document with help of parse_helper surprisingly enough
+	file = name of the file in templates folder
+	fills = (see namespace comments)
+	it = the number of files already processed (0 means it is first run,
+		1 means 2nd run etc)
+	multisize = a list of sizes for the multifields. If it = 0
+		then multisize is set, otherwise it is used to bypass
+		ending checks for multiline confirmations
+	----------------------------------------------------------*/
 	void parse_template(string* file, list<string**>* fills, int it, list<int>* multisize){
 		//Setup Input of file
 		std::fstream in;
@@ -214,6 +225,13 @@ namespace report_generator {
 		out.close();
 	}
 
+	/*----------------------------------------------------------
+	Prompts the user whether they would like to execute a system
+	call specified in config. Returns true if the the command is
+	to be run, false otherwise
+	execution = name of command to be run
+	fills = (see namespace header)
+	----------------------------------------------------------*/
 	bool ask_execution(string execution, list<string**>* fills){
 		cout << "-----\nExecute '" << execution << "'?(y/n)\n";
 		string response;
@@ -237,6 +255,15 @@ namespace report_generator {
 		}
 	}
 
+	/*----------------------------------------------------------
+	Runs the system calls specified in config. These will have
+	the current filename appended to the end of the command
+	file = name of the file (the one to be appended)
+	ask_for_execution = if false, user will not be prompt
+	fills = (see namespace header)
+	file_num = which file is being run, if -1 then loops through
+		all file system calls
+	----------------------------------------------------------*/
 	void file_system_calls(string file, bool ask_for_execution, list<string**>* fills, int file_num = -1){
 		if (file_num == -1){ //DO ALL THE COMMANDS
 			for (int i = 0; i < NUM_FILE_COMMANDS; i++){
@@ -254,7 +281,14 @@ namespace report_generator {
 		}
 	}
 
-	void norm_system_calls( bool ask_for_execution, list<string**>* fills, int file_num = -1){
+	/*----------------------------------------------------------
+	Runs the system calls specified in config.
+	ask_for_execution = if false, user will not be prompt
+	fills = (see namespace header)
+	file_num = which file is being run, if -1 then loops through
+		all file system calls
+	----------------------------------------------------------*/
+	void norm_system_calls(bool ask_for_execution, list<string**>* fills, int file_num = -1){
 		if (file_num == -1){
 			for (int i = 0; i < NUM_NORM_COMMANDS; i++){
 				string execution = norm_commands[i];
