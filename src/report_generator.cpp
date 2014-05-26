@@ -87,21 +87,23 @@ namespace report_generator {
 	field append = the iteration the multiline is on. -1 means it is not a multiline
 	----------------------------------------------------------*/
 	void parse_helper(string* field, bool* inside, bool* autofilled, char c, list<string**>* fills, std::fstream* out, int field_append = -1){
-		
+		//If inside a multiline append a sequential number to the beginning of the field
 		if (field_append != -1){
 			string insert = string("");
 			insert+= (field_append + 48);
 			insert+= (": ");
-			//cout << "inserting " << (char) (field_append + 48) << "to " << *field << '\n';
 			field->insert(0, insert);
 		}
 
+		//separator found and not already inside
 		if (c == SEPARATOR && !*inside){
-			//separator found
 			*inside = true;
 		}
+		//separator found and already inside
 		else if (c == SEPARATOR && *inside){
+			//try to see if field already in list
 			string* entered = find_match(fills, field);
+			//no match found
 			if (entered == NULL){
 				entered = ask_input(*field);
 				string** list_container = new string*[2];
@@ -109,22 +111,27 @@ namespace report_generator {
 				list_container[1] = entered;
 				fills->push_back(list_container);
 			}
+			//match found
 			else{
 				*autofilled = true;
 			}
+			//print the replacement text to file
 			for (int i = 0; i < entered->size(); i++){
 				out->put(entered->at(i));
 			}
+			//prep for next field
 			*inside = false;
 			field->clear();
 		}
+		//if not in a multiline and a normal character
 		else if (!*inside){
 			out->put(c);
 		}
+		//if in a multiline and a normal character
 		else if(*inside){
 			*field += c;
 		}
-
+		//get rid of appended field as to not mess up further field interaction
 		if (field_append != -1 && field->compare("") != 0){
 			field->erase(0, 3);
 		}
@@ -147,6 +154,7 @@ namespace report_generator {
 		string oldfile = string("templates/");
 		oldfile += *file;
 		in.open(oldfile, std::fstream::in);
+		//make sure it is a valid file
 		if (!in.good()) {
 			//Fail condition
 			cout << oldfile << " does not exist. Exiting\n";
@@ -169,9 +177,11 @@ namespace report_generator {
 		string multifield = string("");
 		//push through the file
 		while ((c = in.get()) != EOF){
+			//if Multiseparator is found and not already in multiline
 			if (c == MULTISEPARATOR && !inside_multi){
 				inside_multi = true;
 			}
+			//if Multiseparator is found and already in multiline
 			else if (c == MULTISEPARATOR && inside_multi){
 				//the looping here
 				breakout = false;
@@ -211,10 +221,11 @@ namespace report_generator {
 
 				multifield.clear();
 			}
+			//normal character and not in multiline
 			else if (!inside_multi) {
-				//not in multi
 				parse_helper(&field, &inside, &autofilled, c, fills, &out);
 			}
+			//normal character and in multiline
 			else if (inside_multi){
 				multifield += c;
 			}
@@ -239,6 +250,7 @@ namespace report_generator {
 		cin.clear();
 		cin.ignore();
 
+		//push the choice to the fills list, so it can be output in correct order
 		string** list_container = new string*[2];
 		list_container[0] = new string("~");
 		list_container[1] = new string("y");
