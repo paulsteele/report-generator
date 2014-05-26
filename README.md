@@ -2,7 +2,7 @@
 ##Summer Project 2014
 
 ###Goal
-The goal of this project to create a tool that can be used to generate rehearsal reports easily for stage management. This tool will however be able to work with a variety of LaTeX source files.
+The goal of this project to create a tool that can be used to generate rehearsal reports in LaTeX easily for stage management. This tool will however be able to work with a variety of template files.
 
 ###Use
 This tool allows the user to quickly fill in template source files without altering the actual file. A copy will be made and further action can
@@ -12,9 +12,9 @@ files again.
 
 ###Instructions
 1. Edit ```config``` in the ```src/``` directory to match your liking.
-2. Create template files using specified field separators and multi line separators define in ```config```.
+2. Create template files using specified field separators and multi line separators defined in ```config```.
 3. Place template files in the ```templates/``` directory.
-4. Run the program with desired arguments on the console.
+4. Run the program with desired arguments on the console.(output files will be placed in ```build/``` directory)
 5. Follow prompts for inputting replace texts for fields.
 
 ###Arguments
@@ -45,7 +45,7 @@ Trial Runtime: 1.22s \\
 Trial Runtime: 1.44s \\
 \end{document}
 ```
-```input.txt``` would look like (assuming -e flag was used)
+Assuming the ```-e``` flag was used, ```input.txt``` would look like this.
 ```
 1.22s
 1.00s
