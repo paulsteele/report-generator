@@ -144,3 +144,14 @@ Returns the number of valid arguments passed into the class
 int Arguments::get_number_of_arguments(){
 	return number_of_arguments;
 }
+
+/*----------------------------------------------------------
+Adds a custom argument pair to the list
+----------------------------------------------------------*/
+void Arguments::add_args(string* arg){
+	string** keyvalue = argument_to_keyvalue(arg);
+	keys[get_number_of_arguments()] = keyvalue[0];
+	values[get_number_of_arguments()] = keyvalue[1];
+	++number_of_arguments;
+
+}

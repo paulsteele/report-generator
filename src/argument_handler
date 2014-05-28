@@ -53,5 +53,10 @@ public:
 	3rd... etc. iteration of they key
 	----------------------------------------------------------*/
 	string* value(string key, int index = 0);
+
+	/*----------------------------------------------------------
+	Adds a custom argument pair to the list
+	----------------------------------------------------------*/
+	void add_args(string* arg);
 };
 #endif
